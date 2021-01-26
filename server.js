@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 
-const PORT = 5000;
+const port = 5000;
 
 
 
@@ -69,4 +69,4 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(PORT)
+app.listen(process.env.PORT||port)
