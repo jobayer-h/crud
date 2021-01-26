@@ -16,11 +16,11 @@
         <br>
         <div class="row">
             <form action="/addNew" method="post">
-                <input class="form-control" type="text" name="Name" id="name" placeholder="Enter Name">
+                <input class="form-control" type="text" name="Name" placeholder="Enter Name">
                 <br>
-                <input class="form-control" type="text" name="Age" id="age" placeholder="Enter Age">
+                <input class="form-control" type="text" name="Age" placeholder="Enter Age">
                 <br>
-                <input class="form-control" type="text" name="Salary" id="salary" placeholder="Enter Salary">
+                <input class="form-control" type="text" name="Salary" placeholder="Enter Salary">
                 <br>
                 <input type="submit" value="Add" class="btn btn-primary">
             </form>
@@ -32,22 +32,65 @@
             <h2>All Employees :</h2>
         <div class="row">
             
-            <ul id="list">
+            <div class="col-md-6">
+                <ul id="list">
                 
-            </ul>
+                </ul>
+            </div>
+            <div id="update-container" class="col-md-6">
+                
+            </div>
         </div>
     </div>
 <script>
-    fetch('/allemployee')
-.then(response => response.json())
-.then(data => {
-    data.forEach(single => {
-        document.getElementById('list').innerHTML+=`
-                <li>Name: ${single.Name}, Age: ${single.Age}, Salary: ${single.Salary} </li>
-                <button class="btn btn-warning">Edit</button><button class="btn btn-danger">Delete</button>
-        `
-    });
-})
+    const update = (id) =>{
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const salary = document.getElementById('salary').value;
+        const employee = {name , age , salary}
+
+        fetch(`/update/${id}`,{
+            method : 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(employee)
+        })
+
+    }
+    const cancel = () =>{
+            document.getElementById('update-container').innerHTML ='';
+        }
+    const loadSingle =(id) =>{
+        
+        fetch(`/singleemployee/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('update-container').innerHTML = `
+                <h3>Update Information</h3>
+                <input class="form-control" type="text" name="Name" id="name" placeholder="Update Name" value="${data.Name}">
+                <br>
+                <input class="form-control" type="text" name="Age" id="age" placeholder="Update Age" value="${data.Age}">
+                <br>
+                <input class="form-control" type="text" name="Salary" id="salary" placeholder="Update Salary" value="${data.Salary}">
+                <br>
+                <input type="submit" onclick="update('${data._id}')" value="Update" class="btn btn-success">
+                <input type="submit" onclick="cancel()" value="Close" class="btn btn-secondary">
+            `
+        })
+    }
+    const loadAll = () =>{
+        fetch('/allemployee')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(single => {
+                document.getElementById('list').innerHTML+=`
+                        <li>Name: ${single.Name}, Age: ${single.Age}, Salary: ${single.Salary} </li>
+                        <button onclick="loadSingle('${single._id}')" class="btn btn-warning">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                `
+            });
+        })
+    }
+    loadAll();
 </script>
 </body>
 </html>

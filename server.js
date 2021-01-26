@@ -3,6 +3,7 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodb-crud.vsjom.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 const app = express();
@@ -32,8 +33,24 @@ client.connect(err => {
       .toArray((err,docs)=>{
           res.send(docs)
       })
-      
-      
+  });
+  app.get('/singleemployee/:id', (req, res)=>{
+    employeeCollection.find({_id:ObjectId(req.params.id)})
+    .toArray((err,docs)=>{
+        res.send(docs[0])
+    })
+  })
+
+  app.patch('/update/:id',(req, res)=>{
+    employeeCollection.updateOne({_id:ObjectId(req.params.id)},{
+        $set:{
+            Name: req.body.name,
+            Age: req.body.age,
+            Salary: req.body.salary
+        }
+    }).then((result)=>{
+        console.log(result);
+    })
   })
 
 
