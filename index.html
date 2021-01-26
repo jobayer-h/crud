@@ -54,7 +54,7 @@
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(employee)
         })
-
+        location.reload();
     }
     const cancel = () =>{
             document.getElementById('update-container').innerHTML ='';
@@ -77,6 +77,13 @@
             `
         })
     }
+
+    const deleteOne = (id) => {
+        fetch(`/delete/${id}`,{
+            method: 'DELETE'
+        })
+        location.reload();
+    }
     const loadAll = () =>{
         fetch('/allemployee')
         .then(response => response.json())
@@ -85,7 +92,7 @@
                 document.getElementById('list').innerHTML+=`
                         <li>Name: ${single.Name}, Age: ${single.Age}, Salary: ${single.Salary} </li>
                         <button onclick="loadSingle('${single._id}')" class="btn btn-warning">Edit</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <button onclick="deleteOne('${single._id}')" class="btn btn-danger">Delete</button>
                 `
             });
         })

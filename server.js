@@ -23,9 +23,9 @@ client.connect(err => {
       employeeCollection.insertOne(req.body)
       .then((result) => {
           console.log(result);
-      })
-      
-      res.send('add success');
+          res.sendFile(__dirname + '/index.html');
+          res.redirect('/');
+      });
   });
 
   app.get('/allemployee', (req, res)=>{
@@ -34,6 +34,7 @@ client.connect(err => {
           res.send(docs)
       })
   });
+
   app.get('/singleemployee/:id', (req, res)=>{
     employeeCollection.find({_id:ObjectId(req.params.id)})
     .toArray((err,docs)=>{
@@ -53,7 +54,12 @@ client.connect(err => {
     })
   })
 
-
+  app.delete('/delete/:id',(req, res)=>{
+      employeeCollection.deleteOne({_id:ObjectId(req.params.id)})
+      .then((result)=>{
+          console.log(result);
+      })
+  })
 
 });
 
