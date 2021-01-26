@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB CORS </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+    <h1 class="text-center">Welcome to MongoDB</h1>
+
+    <div class="container">
+        <div class="row">
+            <h3>Add Employee :</h3>
+        </div>
+        <br>
+        <div class="row">
+            <form action="/addNew" method="post">
+                <input class="form-control" type="text" name="Name" id="name" placeholder="Enter Name">
+                <br>
+                <input class="form-control" type="text" name="Age" id="age" placeholder="Enter Age">
+                <br>
+                <input class="form-control" type="text" name="Salary" id="salary" placeholder="Enter Salary">
+                <br>
+                <input type="submit" value="Add" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <br>
+            <h2>All Employees :</h2>
+        <div class="row">
+            
+            <ul id="list">
+                
+            </ul>
+        </div>
+    </div>
+<script>
+    fetch('/allemployee')
+.then(response => response.json())
+.then(data => {
+    data.forEach(single => {
+        document.getElementById('list').innerHTML+=`
+                <li>Name: ${single.Name}, Age: ${single.Age}, Salary: ${single.Salary} </li>
+                <button class="btn btn-warning">Edit</button><button class="btn btn-danger">Delete</button>
+        `
+    });
+})
+</script>
+</body>
+</html>
